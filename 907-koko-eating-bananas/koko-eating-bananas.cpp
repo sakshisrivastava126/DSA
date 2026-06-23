@@ -5,21 +5,25 @@ public:
         for(auto it : piles){
             maxi = max(maxi, it);
         }
-        int l = 1, r = maxi;
-        int ans = INT_MAX;
-
+        
+        int l=1, r=maxi+1;
+        int ans=INT_MAX;
         while(l <= r){
             int mid = l + (r-l)/2;
-
-            long reqTime = 0;
-            for(int i=0; i<piles.size(); i++){
-                reqTime += (piles[i] + mid - 1) / mid;
+            
+            long long curr=0;
+            for(auto it : piles){
+                if(it <= mid) curr += 1;
+                else{
+                    if(it%mid == 0) curr += it/mid;
+                    else curr += (it/mid) +1;
+                } 
             }
-            if(reqTime <= h){
+            if(curr <= h){
                 ans = mid;
                 r = mid-1;
             }
-            else {
+            else{
                 l = mid+1;
             }
         }
