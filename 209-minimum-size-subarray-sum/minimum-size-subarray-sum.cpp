@@ -1,38 +1,20 @@
 class Solution {
 public:
-    bool check(int t, vector<int>& v, int mid){
-        vector<int> pre(v.size()+1);
-        pre[0] = 0;
-        pre[1] = v[0];
-        for(int i=2; i<=v.size(); i++){
-            pre[i] = pre[i-1]+v[i-1];
-        }
-        cout << endl;
-        bool flag = false;
-        for(int i=1; i<=v.size()-mid+1; i++){
-            if(t <= pre[i+mid-1]- pre[i-1]){
-                flag = true;
-            } 
-        }
-        return flag;
-    }
-    int minSubArrayLen(int target, vector<int>& nums) {
-        int n =nums.size();
-        int l = 0;
-        int h = n;
-        int ans=0;
+    int minSubArrayLen(int t, vector<int>& nums) {
+        int l=0, r=0;
+        int ans= INT_MAX;
+        long long sum=0;
 
-        while(l <= h){
-            int mid = l + (h-l)/2;
-
-            if(check(target, nums, mid)){
-                ans = mid;
-                h = mid-1;
+        while(r < nums.size()){ 
+            sum += nums[r];
+            
+            while(sum >= t){
+                ans = min(ans, r-l+1);
+                sum -= nums[l];
+                l++;
             }
-            else{
-                l = mid+1;
-            }
+            r++;
         }
-        return ans;
+        return ans == INT_MAX ? 0 : ans;
     }
 };
