@@ -1,30 +1,50 @@
+#define ll long long 
 class MinStack {
 public:
-    stack<pair<int, int>> st;
-    int currMin = INT_MAX;
+    stack<ll> st;
+    long long prev = LLONG_MAX;
     MinStack() {
         
     }
     
     void push(int value) {
-        currMin = min(currMin, value);  
-        st.push({value, currMin});
+        if(st.empty()){
+            st.push(value);
+            prev = value;
+        }
+        else{
+            if(value > prev){
+                st.push(value);
+            }
+            else{
+                long long to_push = 2LL*value - prev;
+                st.push(to_push);
+                prev = value;
+            }
+        }
     }
     
     void pop() {
-       if(!st.empty()) st.pop();
-       if(!st.empty())
-        currMin = st.top().second;
-       else currMin = INT_MAX;
+        if(!st.empty()){
+            ll val = st.top();
+            st.pop();
+            if(val < prev)
+                prev = 2*prev - val;
+            if(st.empty())
+                prev = INT_MAX;
+        }
     }
     
     int top() {
-        if(!st.empty()) return st.top().first;
+        if(!st.empty()){
+            if(prev > st.top()) return prev;
+            else return st.top();
+        }
         return -1;
     }
     
     int getMin() {
-        return currMin;
+        return prev;
     }
 };
 
