@@ -1,43 +1,38 @@
 class Solution {
 public:
-    bool canFinish(int numCour, vector<vector<int>>& preq) {
-        if(preq.empty()) return true;
-        vector<vector<int>> adj(numCour);
+    bool canFinish(int nc, vector<vector<int>>& preq) {
+        if(preq.size()==0) return true;
+        vector<vector<int>> adj(nc);
         for(auto it : preq){
-            int a = it[0];
-            int b = it[1];
-            adj[b].push_back(a);
+            adj[it[1]].push_back(it[0]);
         }
-        vector<int> ind(numCour, 0);
-        for(int i=0; i<numCour; i++){
+
+        vector<int> ind(nc);
+        for(int i=0; i<nc; i++){
             for(auto it : adj[i]){
                 ind[it]++;
             }
         }
 
         queue<int> q;
-        for(int i=0; i<numCour; i++){
-            if(ind[i] == 0){
+        for(int i=0; i<nc; i++){
+            if(ind[i]==0){
                 q.push(i);
             }
         }
-
         int cnt=0;
-        vector<int> vis(numCour);
         while(!q.empty()){
-            cnt++;
-            int node = q.front();
+            int node= q.front();
             q.pop();
-            vis[node]=1;
+            cnt++;
 
             for(auto it : adj[node]){
                 ind[it]--;
-                if(ind[it] == 0 && !vis[it]){
+                if(ind[it] == 0){
                     q.push(it);
                 }
             }
-
         }
-        return cnt==numCour;
+        return cnt==nc;
     }
 };
